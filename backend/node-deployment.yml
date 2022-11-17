@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node
+  labels:
+    app: node
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: node
+  template:
+    metadata:
+      labels:
+        app: node
+    spec:
+      containers:
+      - name: node
+        image: sandroservo/minha-imagem-node-prod:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3333
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-service
+spec:
+  type: NodePort
+  ports:
+    - targetPort: 3333
+      port: 3333
+      nodePort: 30005
+  selector:
+    app: node
